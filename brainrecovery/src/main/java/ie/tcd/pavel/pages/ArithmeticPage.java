@@ -3,12 +3,14 @@ package ie.tcd.pavel.pages;
 import com.vaadin.flow.component.Key;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.html.H1;
+import com.vaadin.flow.component.html.H2;
 import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.router.Route;
 import ie.tcd.pavel.arithmetics.ArithmeticExercise;
 import ie.tcd.pavel.arithmetics.ArithmeticTaskGenerator;
+
 
 import java.util.Random;
 
@@ -29,6 +31,7 @@ public class ArithmeticPage extends VerticalLayout {
 
     private void loadPage() {
         removeAll();
+        add(new H2("Find the correct answer"));
         exercise = ArithmeticTaskGenerator.generateExerciseByType(random.nextInt(4));
         exerciseString = new H1(exercise.toString());
         add(exerciseString);
@@ -49,10 +52,8 @@ public class ArithmeticPage extends VerticalLayout {
             if(answer.getValue() != null) {
                 if (Integer.parseInt(answer.getValue()) == exercise.getAnswer()) {
                     loadPage();
-                    // Answer is correct
                 }
             } else {
-                incorrect.setText("Wrong Answer");
             }
         });
         add(confirmButton);
