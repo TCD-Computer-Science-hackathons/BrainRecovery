@@ -25,7 +25,7 @@ How many,How often,How like,%How much
 _____ do you live?
 %Where,When,Who,What
 Please give me a _____ of noodles
-bowl,plate,piece,glass
+%bowl,plate,piece,glass
 I _____ sick yesterday
 am,%was,are,is
 We don't have _____ tomatoes left in the fridge
