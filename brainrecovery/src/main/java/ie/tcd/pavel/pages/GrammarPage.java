@@ -1,6 +1,7 @@
 package ie.tcd.pavel.pages;
 
 import com.vaadin.flow.component.button.Button;
+import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.html.H1;
 import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
@@ -11,10 +12,7 @@ import javax.print.DocFlavor;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Random;
+import java.util.*;
 
 @Route("grammar")
 public class GrammarPage extends VerticalLayout {
@@ -79,6 +77,7 @@ public class GrammarPage extends VerticalLayout {
 
         String sentence = sentences.get(sentenceIndex);
         ArrayList<String> o = options.get(sentenceIndex);
+        Collections.shuffle(o);
 
         ArrayList<Button> buttons = new ArrayList<>();
         for(String s : o) {
@@ -94,9 +93,12 @@ public class GrammarPage extends VerticalLayout {
             }
             button.addClickListener(buttonClickEvent -> {
                 if(button.getText().equals(correctAnswer)) {
+                    button.addThemeVariants(ButtonVariant.LUMO_SUCCESS);
+                    error.setText("");
                     generatePage();
                 } else {
                     error.setText("Wrong Answer");
+                    button.addThemeVariants(ButtonVariant.LUMO_ERROR);
                 }
             });
             buttons.add(button);

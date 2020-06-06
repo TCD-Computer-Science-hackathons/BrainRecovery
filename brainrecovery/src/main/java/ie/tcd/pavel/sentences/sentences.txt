@@ -2,3 +2,19 @@ Jenny _____ tired
 be,%is,has,have
 _____ lots of animals in the zoo
 There,There is,%There are,There aren't
+Turnips are often found _____ the ground
+%within,infront of,out,buried
+_____ over the meal yesterday
+%Dave ate,Dave eats,Dave eat,Dave is eating
+How many people _____ in your family?
+%are there,is there,there are,there
+Do you prefer to jump or run?
+%No,Yes,I like to swim,I cannot swim
+Is there _____ water in the glass?
+%much,many,some,any
+He hit _____ head
+%his,her,my,their
+I _____ two sisters
+has,her,his,%have
+This is my pineapple. It is _____
+%mine,yours,hers,his
