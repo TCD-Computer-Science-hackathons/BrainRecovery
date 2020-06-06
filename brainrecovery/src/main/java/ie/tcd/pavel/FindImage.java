@@ -36,10 +36,7 @@ public class FindImage extends HorizontalLayout
         H1 title = new H1("Match the image");
         Button button = new Button("Reload");
         button.addClickListener(event -> {
-            leftLayout.removeAll();
-            topRow.removeAll();
-            bottomRow.removeAll();
-            loadImages();
+            reloadImages();
         });
         loadImages();
         rightLayout.add(title, topRow, bottomRow, button);
@@ -68,6 +65,16 @@ public class FindImage extends HorizontalLayout
                     pathname = System.getProperty("user.dir")+"\\src\\main\\java\\ie\\tcd\\pavel\\images\\cat_" + rand + ".jpg";
                     image = loadImage(pathname, "" + rand);
                 }
+
+                // If the user clicks an image that does not match it resets at the moment
+                image.addClickListener(event -> {
+                    if(image.getAlt().isPresent()) {
+                        if(!image.getAlt().get().equals(currentImage)) {
+                            reloadImages();
+                        }
+                    }
+                });
+
                 int rand2 = random.nextInt(NUM_IMAGES);
                 if(rand2 == 0) {
                     Image imageCopy = loadImage(pathname, "0" + rand);
@@ -89,6 +96,7 @@ public class FindImage extends HorizontalLayout
             if(image.getAlt().isPresent()) {
                 alt = image.getAlt().get();
             }
+            currentImage = alt;
             String pathname = System.getProperty("user.dir")+"\\src\\main\\java\\ie\\tcd\\pavel\\images\\" + alt + ".jpg";
             leftLayout.add(loadImage(pathname, "0" + rand3));
             leftLayout.setAlignItems(Alignment.CENTER);
@@ -98,6 +106,13 @@ public class FindImage extends HorizontalLayout
         {
             System.out.println("ERROR LOADING IMAGE: "+e);
         }
+    }
+
+    private void reloadImages() {
+        leftLayout.removeAll();
+        topRow.removeAll();
+        bottomRow.removeAll();
+        loadImages();
     }
 
     private Image loadImage(String pathname, String id) {
