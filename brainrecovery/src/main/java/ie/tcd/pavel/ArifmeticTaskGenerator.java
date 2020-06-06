@@ -2,40 +2,28 @@ package ie.tcd.pavel;
 
 public class ArifmeticTaskGenerator {
 
-    public void generateExerciseByType(int typeNumber)
+    public ArithmeticExercise generateExerciseByType(int typeNumber)
     {
-        int numberA;
-        int numberB;
-        int answer;
+        ArithmeticExercise result ;
 
         if(typeNumber==0)
         {
-            addition additionObject = new addition();
-            numberA = additionObject.getNumberA();
-            numberB = additionObject.getNumberB();
-            answer = additionObject.getAnswer();
+            result = new addition();
         }
         else if(typeNumber==1)
         {
-            residual residualObject = new residual();
-            numberA = residualObject.getNumberA();
-            numberB = residualObject.getNumberB();
-            answer = residualObject.getAnswer();
+            result = new residual();
         }
         else if(typeNumber==2)
         {
-            multiplication multiplicationObject = new multiplication();
-            numberA = multiplicationObject.getNumberA();
-            numberB = multiplicationObject.getNumberB();
-            answer = multiplicationObject.getAnswer();
+            result = new multiplication();
         }
         else
         {
-            division divisionObject = new division();
-            numberA = divisionObject.getNumberA();
-            numberB = divisionObject.getNumberB();
-            answer = divisionObject.getAnswer();
+            result = new division();
         }
+
+        return result;
     }
 
 }
