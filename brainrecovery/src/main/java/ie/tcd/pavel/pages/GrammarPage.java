@@ -15,7 +15,6 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.*;
 
-@Route("grammar")
 public class GrammarPage extends VerticalLayout {
 
     private ArrayList<String> sentences;
@@ -25,8 +24,10 @@ public class GrammarPage extends VerticalLayout {
     private String correctAnswer;
     private Label error;
     private int sentenceIndex;
+    public ScoreWidget score;
 
-    public GrammarPage() {
+    public GrammarPage(ScoreWidget score) {
+        this.score = score;
         sentences = new ArrayList<>();
         options = new ArrayList<>();
         random = new Random();
@@ -94,13 +95,16 @@ public class GrammarPage extends VerticalLayout {
             }
             button.addClickListener(buttonClickEvent -> {
                 if(button.getText().equals(correctAnswer)) {
+                    score.correct++;
                     button.addThemeVariants(ButtonVariant.LUMO_SUCCESS);
                     error.setText("");
-                    generatePage();
                 } else {
+                    score.inCorrect++;
                     error.setText("Wrong Answer");
                     button.addThemeVariants(ButtonVariant.LUMO_ERROR);
                 }
+                score.generateScore();
+                generatePage();
             });
             buttons.add(button);
         }
@@ -112,5 +116,6 @@ public class GrammarPage extends VerticalLayout {
             add(b);
         }
         add(error);
+        add(score);
     }
 }

@@ -15,7 +15,6 @@ import java.io.File;
 import java.util.*;
 
 
-@Route("img")
 public class FindImagePage extends VerticalLayout
 {
 
@@ -27,9 +26,11 @@ public class FindImagePage extends VerticalLayout
     private String correctOptionName;
     private boolean isCorrect;
     private H2 title = new H2("Find a matching image");
+    public ScoreWidget score;
 
-    public FindImagePage()
+    public FindImagePage(ScoreWidget score)
     {
+        this.score = score;
         this.setAlignItems(Alignment.CENTER);
         this.setWidthFull();
         loadAllImages();
@@ -75,7 +76,7 @@ public class FindImagePage extends VerticalLayout
         optionRow.add(option);
 
         this.removeAll();
-        this.add(title,topRow,bottomRow,optionRow);
+        this.add(title,topRow,bottomRow,optionRow,score);
 
     }
 
@@ -127,7 +128,17 @@ public class FindImagePage extends VerticalLayout
             image.setHeight(height);
 
             image.addClickListener(event->{isCorrect = event.getSource().equals(images.get(correctOption));
-               buildLayout();
+
+                if(isCorrect)
+                {
+                    score.correct++;
+                }
+                else
+                {
+                    score.inCorrect++;
+                }
+                score.generateScore();
+                buildLayout();
             });
 
             image.getStyle().set("border","1px solid #000000");

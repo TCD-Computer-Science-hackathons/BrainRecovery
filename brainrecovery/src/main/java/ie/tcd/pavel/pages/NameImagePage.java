@@ -18,7 +18,6 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.*;
 
-@Route("nameimage")
 public class NameImagePage extends VerticalLayout
 {
     private final static Random rnd = new Random();
@@ -27,9 +26,11 @@ public class NameImagePage extends VerticalLayout
     boolean isCorrect;
     String correctOption;
     private H2 title = new H2("Find the correct answer");
+    public ScoreWidget score;
 
-    public NameImagePage()
+    public NameImagePage(ScoreWidget score)
     {
+        this.score = score;
         this.setWidthFull();
         this.setAlignItems(Alignment.CENTER);
         loadCaptions();
@@ -55,6 +56,15 @@ public class NameImagePage extends VerticalLayout
             Button button = new Button(x);
             button.setWidth("15em");
             button.addClickListener(event->{isCorrect = correctOption.equals(event.getSource().getText());
+                if(isCorrect)
+                {
+                    score.correct++;
+                }
+                else
+                {
+                    score.inCorrect++;
+                }
+                score.generateScore();
                 buildLayout();});
             buttons.add(button);
         }
@@ -75,7 +85,7 @@ public class NameImagePage extends VerticalLayout
 
         this.removeAll();
 
-        this.add(title,randomImage,top,bottom);
+        this.add(title,randomImage,top,bottom,score);
 
     }
 
@@ -99,16 +109,6 @@ public class NameImagePage extends VerticalLayout
                 e.printStackTrace();
             }
 
-        }
-
-        for(String k : captions.keySet())
-        {
-            System.out.print(k+ ":     ");
-            for(String n : captions.get(k))
-            {
-                System.out.print(n+", ");
-            }
-            System.out.println();
         }
     }
 

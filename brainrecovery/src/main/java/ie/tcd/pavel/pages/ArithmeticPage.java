@@ -14,16 +14,17 @@ import ie.tcd.pavel.arithmetics.ArithmeticTaskGenerator;
 
 import java.util.Random;
 
-@Route("arithmetic")
 public class ArithmeticPage extends VerticalLayout {
 
     private ArithmeticExercise exercise;
     private H1 exerciseString;
     private Label incorrect;
     private Random random;
+    public ScoreWidget score;
 
 
-    public ArithmeticPage() {
+    public ArithmeticPage(ScoreWidget score) {
+        this.score = score;
         setAlignItems(Alignment.CENTER);
         random = new Random();
         loadPage();
@@ -49,13 +50,19 @@ public class ArithmeticPage extends VerticalLayout {
         Button confirmButton = new Button("Confirm");
         confirmButton.addClickShortcut(Key.ENTER);
         confirmButton.addClickListener(event -> {
-            if(answer.getValue() != null) {
+            if(answer.getValue() != null&&!answer.getValue().equals("")) {
                 if (Integer.parseInt(answer.getValue()) == exercise.getAnswer()) {
-                    loadPage();
+                    score.correct++;
                 }
-            } else {
+                else
+                {
+                    score.inCorrect++;
+                }
+                score.generateScore();
+                loadPage();
             }
         });
         add(confirmButton);
+        add(score);
     }
 }
