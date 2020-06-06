@@ -1,0 +1,4 @@
+triangle
+angle
+tangle
+strangle

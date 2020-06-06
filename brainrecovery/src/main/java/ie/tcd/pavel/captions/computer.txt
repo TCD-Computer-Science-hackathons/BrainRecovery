@@ -1,0 +1,4 @@
+computer
+tutor
+scooter
+compiler
