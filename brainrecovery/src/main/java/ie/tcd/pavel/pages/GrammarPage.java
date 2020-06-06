@@ -87,7 +87,8 @@ public class GrammarPage extends VerticalLayout {
                 correctAnswer = s.substring(1);
             }
             Button button = new Button();
-            button.getStyle().set("width", "10em");
+            button.getStyle().set("width", "20em");
+            button.getStyle().set("height", "8em");
             if(s.toCharArray()[0] == '%') {
                 button.setText(s.substring(1));
             } else {

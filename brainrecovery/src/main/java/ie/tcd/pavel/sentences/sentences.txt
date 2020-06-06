@@ -9,7 +9,7 @@ _____ over the meal yesterday
 How many people _____ in your family?
 %are there,is there,there are,there
 Do you prefer to jump or run?
-%No,Yes,I like to swim,I cannot swim
+%I prefer to jump,Yes,I like to swim,I cannot swim
 Is there _____ water in the glass?
 %much,many,some,any
 He hit _____ head
@@ -18,3 +18,29 @@ I _____ two sisters
 has,her,his,%have
 This is my pineapple. It is _____
 %mine,yours,hers,his
+There isn't _____ water in the bottle
+an,some,%any,a few
+_____ juice do you want?
+How many,How often,How like,%How much
+_____ do you live?
+%Where,When,Who,What
+Please give me a _____ of noodles
+%bowl,plate,piece,glass
+I _____ sick yesterday
+am,%was,are,is
+We don't have _____ tomatoes left in the fridge
+%any,a few,some,much
+Which one is a noun?
+jumping,%bird,partly,gigantic
+Which one is plural?
+boy,woman,fireman,%men
+_____ do you weigh?
+How long,%How much,How tall,How many
+Do people like to work hard?
+Yes they do not,No they not,%No they do not,Yes they not
+Which one is a plural noun?
+bottle,glass,table,%leaves
+I am going _____ in the sea
+swam,to swam,%to swim,swimming
+Bob _____ in his diary all the time
+writing,is write,%writes,shakes
