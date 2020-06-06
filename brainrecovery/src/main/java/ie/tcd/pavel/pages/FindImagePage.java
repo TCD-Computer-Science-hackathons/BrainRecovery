@@ -7,6 +7,8 @@ import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.server.StreamResource;
+
+
 import java.io.ByteArrayInputStream;
 import java.nio.file.Files;
 import java.io.File;
@@ -24,7 +26,6 @@ public class FindImagePage extends VerticalLayout
     private int correctOption;
     private String correctOptionName;
     private boolean isCorrect;
-    private Button next = new Button("Next task");
     private H2 title = new H2("Find a matching image");
 
     public FindImagePage()
@@ -32,8 +33,6 @@ public class FindImagePage extends VerticalLayout
         this.setAlignItems(Alignment.CENTER);
         this.setWidthFull();
         loadAllImages();
-        next.addClickListener(event -> {buildLayout();});
-        next.setWidth("15em");
         buildLayout();
 
     }
@@ -76,7 +75,7 @@ public class FindImagePage extends VerticalLayout
         optionRow.add(option);
 
         this.removeAll();
-        this.add(title,topRow,bottomRow,optionRow,next);
+        this.add(title,topRow,bottomRow,optionRow);
 
     }
 
