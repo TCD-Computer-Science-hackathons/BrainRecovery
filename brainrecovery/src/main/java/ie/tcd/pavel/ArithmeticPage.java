@@ -1,5 +1,6 @@
 package ie.tcd.pavel;
 
+import com.vaadin.flow.component.Key;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.html.H1;
 import com.vaadin.flow.component.html.Label;
@@ -31,7 +32,7 @@ public class ArithmeticPage extends VerticalLayout {
         add(exerciseString);
 
         TextField answer = new TextField();
-        answer.setPattern("[0-9]*");
+        answer.setPattern("-?[0-9]*");
         answer.setPreventInvalidInput(true);
         answer.setMaxLength(10);
         answer.getStyle().set("width", "10em");
@@ -41,6 +42,7 @@ public class ArithmeticPage extends VerticalLayout {
         add(incorrect);
 
         Button confirmButton = new Button("Confirm");
+        confirmButton.addClickShortcut(Key.ENTER);
         confirmButton.addClickListener(event -> {
             if(Integer.parseInt(answer.getValue()) == exercise.getAnswer()) {
                 loadPage();
