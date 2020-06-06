@@ -44,9 +44,11 @@ public class ArithmeticPage extends VerticalLayout {
         Button confirmButton = new Button("Confirm");
         confirmButton.addClickShortcut(Key.ENTER);
         confirmButton.addClickListener(event -> {
-            if(Integer.parseInt(answer.getValue()) == exercise.getAnswer()) {
-                loadPage();
-                // Answer is correct
+            if(answer.getValue() != null) {
+                if (Integer.parseInt(answer.getValue()) == exercise.getAnswer()) {
+                    loadPage();
+                    // Answer is correct
+                }
             } else {
                 incorrect.setText("Wrong Answer");
             }
