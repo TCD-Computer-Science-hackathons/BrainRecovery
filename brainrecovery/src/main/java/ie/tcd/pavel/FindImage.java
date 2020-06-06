@@ -28,8 +28,6 @@ public class FindImage extends VerticalLayout
     private H2 title = new H2("Find a matching image");
     private H2 gameResult = new H2("");
 
-
-
     public FindImage()
     {
         this.setAlignItems(Alignment.CENTER);
@@ -141,6 +139,7 @@ public class FindImage extends VerticalLayout
                else
                {
                    gameResult.setText("Incorrect choice");
+                   buildLayout();
                }
             });
 
