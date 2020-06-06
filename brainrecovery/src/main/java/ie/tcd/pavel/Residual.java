@@ -2,6 +2,10 @@ package ie.tcd.pavel;
 
 public class Residual extends ArithmeticExercise{
 
+    public Residual() {
+        setResidualNumbers();
+    }
+
     public void setResidualNumbers()
     {
         int number1 = generateRandomNumber(101);
@@ -10,6 +14,11 @@ public class Residual extends ArithmeticExercise{
         setNumberB(number2);
         int answerOfResidual = number1 - number2;
         setAnswer(answerOfResidual);
+    }
+
+    @Override
+    public String toString() {
+        return String.format("%d - %d = ", getNumberA(), getNumberB());
     }
 
 }

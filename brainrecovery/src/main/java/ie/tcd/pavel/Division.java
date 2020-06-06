@@ -2,6 +2,10 @@ package ie.tcd.pavel;
 
 public class Division extends ArithmeticExercise{
 
+    public Division() {
+        setDivisionNumbers();
+    }
+
     public void setDivisionNumbers()
     {
         int number1 = generateRandomNumber(101);
@@ -13,4 +17,8 @@ public class Division extends ArithmeticExercise{
         setAnswer(answerOfDivision);
     }
 
+    @Override
+    public String toString() {
+        return String.format("%d / %d = ", getNumberA(), getNumberB());
+    }
 }

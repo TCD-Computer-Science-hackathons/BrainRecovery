@@ -35,4 +35,8 @@ public class ArithmeticExercise {
     public void setAnswer(int answer) {
         this.answer = answer;
     }
+
+    public String toString() {
+        return null;
+    }
 }

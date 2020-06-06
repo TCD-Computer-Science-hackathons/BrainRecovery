@@ -2,6 +2,10 @@ package ie.tcd.pavel;
 
 public class Multiplication extends ArithmeticExercise{
 
+    public Multiplication() {
+        setMultiplicationNumbers();
+    }
+
     public void setMultiplicationNumbers()
     {
         int number1 = generateRandomNumber(11);
@@ -12,4 +16,8 @@ public class Multiplication extends ArithmeticExercise{
         setAnswer(answerOfMultiplication);
     }
 
+    @Override
+    public String toString() {
+        return String.format("%d * %d = ", getNumberA(), getNumberB());
+    }
 }

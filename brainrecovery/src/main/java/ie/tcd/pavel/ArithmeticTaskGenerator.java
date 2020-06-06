@@ -2,7 +2,9 @@ package ie.tcd.pavel;
 
 public class ArithmeticTaskGenerator {
 
-    public ArithmeticExercise generateExerciseByType(int typeNumber)
+
+
+    public static ArithmeticExercise generateExerciseByType(int typeNumber)
     {
         ArithmeticExercise result ;
 
