@@ -7,7 +7,12 @@ import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.Route;
 import org.atmosphere.interceptor.AtmosphereResourceStateRecovery;
 
+import javax.print.DocFlavor;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Random;
 
@@ -15,58 +20,94 @@ import java.util.Random;
 public class GrammarPage extends VerticalLayout {
 
     private ArrayList<String> sentences;
-    private HashMap<String, String[]> sentencesToAnswers;
-
+    private ArrayList<ArrayList<String>> options;
     private Random random;
-
-    private Label wrong;
+    private H1 title;
+    private String correctAnswer;
+    private Label error;
+    private int sentenceIndex;
 
     public GrammarPage() {
-
+        sentences = new ArrayList<>();
+        options = new ArrayList<>();
         random = new Random();
-        // TEMPORARY
-        sentences.add("Jenny _____ tired");
-        sentences.add("_____ lots of animals in the zoo");
-        String[] missingWordOptions = new String[] {"be", "%is", "has", "have"};
-        sentencesToAnswers.put(sentences.get(0), missingWordOptions);
-        missingWordOptions = new String[] {"There", "There is", "%There are", "There aren't"};
-        sentencesToAnswers.put(sentences.get(1), missingWordOptions);
+        title = new H1();
+        error = new Label();
 
         setAlignItems(Alignment.CENTER);
-        loadPage();
-    }
 
-    private void loadPage() {
-        removeAll();
-
-        int randomInt = random.nextInt(sentences.size());
-
-        H1 sentenceH1 = new H1(sentences.get(randomInt));
-        add(sentenceH1);
-        wrong = new Label("");
-
-        String[] options = sentencesToAnswers.get(sentences.get(randomInt));
-        String correctAnswer = "";
-        for(int index = 0; index < options.length; index++) {
-            if(options[index].toCharArray()[0] == '%') {
-                correctAnswer = options[index];
+        // Read in the grammar questions
+        ArrayList<String> tempArray = new ArrayList<>();
+        try {
+            tempArray = readGrammarQuestions();
+        } catch(Exception e) {
+            System.out.println("Failed to read grammar questions: " + e);
+        }
+        for(int i = 0; i < tempArray.size(); i++) {
+            if(i % 2 == 0) {
+                sentences.add(tempArray.get(i));
+            } else {
+                ArrayList<String> temp = new ArrayList<>(Arrays.asList(tempArray.get(i).split(",")));
+                options.add(temp);
             }
         }
-        for(String s : options) {
-            Button option = new Button(s);
-            option.getStyle().set("width", "10em");
-            option.addClickListener(event -> {
-                if(true) {             //option.getText().equals(correctAnswer
-                    // ANSWER IS CORRECT
-                    loadPage();
-                } else {
-                    wrong.setText("Wrong Answer");
-                }
-            });
-            add(option);
-        }
 
-        add(wrong);
+        // Generate the page using them
+        sentenceIndex = 0;
+        generatePage();
+
     }
 
+    private ArrayList<String> readGrammarQuestions() throws IOException {
+        String path = System.getProperty("user.dir")+"\\src\\main\\java\\ie\\tcd\\pavel\\sentences\\sentences.txt";
+        return (ArrayList<String>) Files.readAllLines(Paths.get(path));
+    }
+
+    private void generatePage() {
+        removeAll();
+
+        // Make sure its not the same page every time
+        int tempIndex = sentenceIndex;
+        sentenceIndex = random.nextInt(sentences.size());
+        if(tempIndex == sentenceIndex) {
+            if(sentenceIndex < sentences.size() - 1) {
+                sentenceIndex++;
+            } else {
+                sentenceIndex--;
+            }
+        }
+
+        String sentence = sentences.get(sentenceIndex);
+        ArrayList<String> o = options.get(sentenceIndex);
+
+        ArrayList<Button> buttons = new ArrayList<>();
+        for(String s : o) {
+            if(s.toCharArray()[0] == '%') {
+                correctAnswer = s.substring(1);
+            }
+            Button button = new Button();
+            button.getStyle().set("width", "10em");
+            if(s.toCharArray()[0] == '%') {
+                button.setText(s.substring(1));
+            } else {
+                button.setText(s);
+            }
+            button.addClickListener(buttonClickEvent -> {
+                if(button.getText().equals(correctAnswer)) {
+                    generatePage();
+                } else {
+                    error.setText("Wrong Answer");
+                }
+            });
+            buttons.add(button);
+        }
+        title.setText(sentence);
+
+        // Add everything
+        add(title);
+        for(Button b : buttons) {
+            add(b);
+        }
+        add(error);
+    }
 }
