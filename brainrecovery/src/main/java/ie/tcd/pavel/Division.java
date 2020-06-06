@@ -1,6 +1,6 @@
 package ie.tcd.pavel;
 
-public class division extends ArithmeticExercise{
+public class Division extends ArithmeticExercise{
 
     public void setDivisionNumbers()
     {

@@ -1,15 +1,15 @@
 package ie.tcd.pavel;
 
-public class addition extends ArithmeticExercise{
+public class Residual extends ArithmeticExercise{
 
-    public void setAdditionNumbers()
+    public void setResidualNumbers()
     {
         int number1 = generateRandomNumber(101);
         setNumberA(number1);
         int number2 = generateRandomNumber(101);
         setNumberB(number2);
-        int answerOfAddition = number1 + number2;
-        setAnswer(answerOfAddition);
+        int answerOfResidual = number1 - number2;
+        setAnswer(answerOfResidual);
     }
 
 }

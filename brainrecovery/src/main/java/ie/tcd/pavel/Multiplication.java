@@ -1,6 +1,6 @@
 package ie.tcd.pavel;
 
-public class multiplication extends ArithmeticExercise{
+public class Multiplication extends ArithmeticExercise{
 
     public void setMultiplicationNumbers()
     {

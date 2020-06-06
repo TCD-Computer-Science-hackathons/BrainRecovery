@@ -1,130 +1,159 @@
 package ie.tcd.pavel;
 
 import com.vaadin.flow.component.button.Button;
-import com.vaadin.flow.component.html.H1;
+import com.vaadin.flow.component.html.H2;
 import com.vaadin.flow.component.html.Image;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.server.StreamResource;
-import com.vaadin.flow.server.VaadinContext;
-import com.vaadin.flow.server.VaadinService;
-
 import java.io.ByteArrayInputStream;
 import java.nio.file.Files;
 import java.io.File;
-import java.util.ArrayList;
-import java.util.Optional;
-import java.util.Random;
+import java.util.*;
+
 
 @Route("img")
-public class FindImage extends HorizontalLayout
+public class FindImage extends VerticalLayout
 {
 
-    private ArrayList<Image> images = new ArrayList<>();
-    private HorizontalLayout topRow = new HorizontalLayout();
-    private HorizontalLayout bottomRow = new HorizontalLayout();
-    private VerticalLayout leftLayout = new VerticalLayout();
-    private VerticalLayout rightLayout = new VerticalLayout();
+    private ArrayList<Image> images = new ArrayList<Image>();
+    private ArrayList<Integer> occupiedIndices = new ArrayList<Integer>();
+    private final static Random rnd = new Random();
+    private final static int NUMBER_OF_TILES = 4;
+    private int correctOption;
+    private String correctOptionName;
+    private boolean isCorrect;
+    private Button next = new Button("Next task");
+    private H2 title = new H2("Find a matching image");
+    private H2 gameResult = new H2("");
 
-    private String currentImage;
-    private static final int NUM_IMAGES = 4;
+
 
     public FindImage()
     {
-        removeAll();
-        H1 title = new H1("Match the image");
-        Button button = new Button("Reload");
-        button.addClickListener(event -> {
-            reloadImages();
-        });
-        loadImages();
-        rightLayout.add(title, topRow, bottomRow, button);
-        rightLayout.setAlignItems(Alignment.CENTER);
-        leftLayout.setAlignItems(Alignment.CENTER);
-        add(leftLayout, rightLayout);
+        this.setAlignItems(Alignment.CENTER);
+        this.setWidthFull();
+        loadAllImages();
+        next.addClickListener(event -> {buildLayout();});
+        next.setWidth("15em");
+        buildLayout();
 
     }
 
-    private void loadImages() {
-        images.clear();
-        try {
-            Random random = new Random();
-            for(int i = 0; i < NUM_IMAGES; i++) {
-                int rand = random.nextInt(11);
-                String pathname;
-                File imgFile;
-                byte[] imageBytes;
-                StreamResource resource;
-                Image image;
-                if(rand < 10) {
-                    pathname = System.getProperty("user.dir")+"\\src\\main\\java\\ie\\tcd\\pavel\\images\\cat_0" + rand + ".jpg";
-                    image = loadImage(pathname, "0" + rand);
-                }
-                else {
-                    pathname = System.getProperty("user.dir")+"\\src\\main\\java\\ie\\tcd\\pavel\\images\\cat_" + rand + ".jpg";
-                    image = loadImage(pathname, "" + rand);
-                }
+    private void buildLayout()
+    {
+        HorizontalLayout topRow = new HorizontalLayout();
+        HorizontalLayout bottomRow = new HorizontalLayout();
+        HorizontalLayout optionRow = new HorizontalLayout();
 
-                // If the user clicks an image that does not match it resets at the moment
-                image.addClickListener(event -> {
-                    if(image.getAlt().isPresent()) {
-                        if(!image.getAlt().get().equals(currentImage)) {
-                            reloadImages();
-                        }
-                    }
-                });
+        topRow.setWidth("30em");
+        bottomRow.setWidth("30em");
+        optionRow.setWidth("30em");
 
-                int rand2 = random.nextInt(NUM_IMAGES);
-                if(rand2 == 0) {
-                    Image imageCopy = loadImage(pathname, "0" + rand);
-                    images.add(imageCopy);
-                }
-                images.add(image);
-            }
-            for(int image = 0; image < NUM_IMAGES; image++) {
-                if(image < (NUM_IMAGES / 2)) {
-                    topRow.add(images.get(image));
-                } else {
-                    bottomRow.add(images.get(image));
-                }
-            }
+        topRow.setJustifyContentMode(JustifyContentMode.CENTER);
+        bottomRow.setJustifyContentMode(JustifyContentMode.CENTER);
+        optionRow.setJustifyContentMode(JustifyContentMode.CENTER);
 
-            int rand3 = random.nextInt(NUM_IMAGES);
-            Image image = images.get(rand3);
-            String alt = "cat_00";
-            if(image.getAlt().isPresent()) {
-                alt = image.getAlt().get();
+        occupiedIndices.clear();
+
+        correctOption = rnd.nextInt(images.size());
+
+        occupiedIndices.add(correctOption);
+
+        for(int i = 0; i < NUMBER_OF_TILES - 1; i++)
+        {
+            occupiedIndices.add(getANewRandomIndex());
+        }
+
+        Collections.shuffle(occupiedIndices);
+
+        int index = images.get(correctOption).getSrc().lastIndexOf('/');
+        correctOptionName =  images.get(correctOption).getSrc().substring(index+1);
+
+        topRow.add(images.get(occupiedIndices.get(0)),images.get(occupiedIndices.get(1)));
+        bottomRow.add(images.get(occupiedIndices.get(2)),images.get(occupiedIndices.get(3)));
+        Image option = loadImage(correctOptionName,"13em","13em");
+
+        option.addClickListener(event->{gameResult.setText("Please choose one of the four images above");});
+        optionRow.add(option);
+
+        gameResult.setText("");
+
+        this.removeAll();
+        this.add(title,topRow,bottomRow,optionRow,next,gameResult);
+
+    }
+
+    private int getANewRandomIndex()
+    {
+        boolean foundNew = false;
+        int random = - 1;
+
+        if(occupiedIndices.size()==images.size())
+        {
+            return random;
+        }
+
+        while(!foundNew) {
+            random = rnd.nextInt(images.size());
+            if(!occupiedIndices.contains(random))
+            {
+                foundNew = true;
             }
-            currentImage = alt;
-            String pathname = System.getProperty("user.dir")+"\\src\\main\\java\\ie\\tcd\\pavel\\images\\" + alt + ".jpg";
-            leftLayout.add(loadImage(pathname, "0" + rand3));
-            leftLayout.setAlignItems(Alignment.CENTER);
-            leftLayout.setWidth("20%");
+        }
+
+        return random;
+
+    }
+
+    private void loadAllImages()
+    {
+        File folder = new File( System.getProperty("user.dir")+"\\src\\main\\java\\ie\\tcd\\pavel\\images");
+        File[] listOfFiles = folder.listFiles();
+
+        for(int i = 0; i < listOfFiles.length; i++)
+        {
+            images.add(loadImage(listOfFiles[i].getName(),"13em","13em"));
+        }
+
+    }
+
+    private Image loadImage(String name, String width, String height)
+    {
+        try
+        {
+            File imgFile = new File(System.getProperty("user.dir")+"\\src\\main\\java\\ie\\tcd\\pavel\\images\\"
+                    +name);
+            byte[] imageBytes = Files.readAllBytes(imgFile.toPath());
+            StreamResource resource = new StreamResource(name, () -> new ByteArrayInputStream(imageBytes));
+
+            Image image = new Image(resource, name);
+            image.setWidth(width);
+            image.setHeight(height);
+
+            image.addClickListener(event->{isCorrect = event.getSource().equals(images.get(correctOption));
+               if(isCorrect)
+               {
+                   gameResult.setText("Correct choice");
+                   buildLayout();
+               }
+               else
+               {
+                   gameResult.setText("Incorrect choice");
+               }
+            });
+
+            image.getStyle().set("border","1px solid #000000");
+
+            return image;
+
         }
         catch (Exception e)
         {
-            System.out.println("ERROR LOADING IMAGE: "+e);
-        }
-    }
-
-    private void reloadImages() {
-        leftLayout.removeAll();
-        topRow.removeAll();
-        bottomRow.removeAll();
-        loadImages();
-    }
-
-    private Image loadImage(String pathname, String id) {
-        try {
-            File imgFile = new File(pathname);
-            byte[] imageBytes = Files.readAllBytes(imgFile.toPath());
-            StreamResource resource = new StreamResource("cat_" + id + ".jpg", () -> new ByteArrayInputStream(imageBytes));
-            Image image = new Image(resource, "cat_" + id);
-            return image;
-        } catch (Exception e) {
             System.out.println("ERROR LOADING IMAGE: " + e);
         }
         return null;
     }
+
 }

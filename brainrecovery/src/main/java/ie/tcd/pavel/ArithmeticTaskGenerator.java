@@ -1,6 +1,6 @@
 package ie.tcd.pavel;
 
-public class ArifmeticTaskGenerator {
+public class ArithmeticTaskGenerator {
 
     public ArithmeticExercise generateExerciseByType(int typeNumber)
     {
@@ -8,19 +8,19 @@ public class ArifmeticTaskGenerator {
 
         if(typeNumber==0)
         {
-            result = new addition();
+            result = new Addition();
         }
         else if(typeNumber==1)
         {
-            result = new residual();
+            result = new Residual();
         }
         else if(typeNumber==2)
         {
-            result = new multiplication();
+            result = new Multiplication();
         }
         else
         {
-            result = new division();
+            result = new Division();
         }
 
         return result;
