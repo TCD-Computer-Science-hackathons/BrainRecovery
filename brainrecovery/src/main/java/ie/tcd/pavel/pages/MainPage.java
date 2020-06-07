@@ -10,6 +10,7 @@ import com.vaadin.flow.component.html.H1;
 import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.progressbar.ProgressBar;
+import com.vaadin.flow.component.textfield.NumberField;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.server.PWA;
@@ -17,6 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.swing.*;
 import java.util.ArrayList;
+import java.util.Random;
 
 @Route("")
 public class MainPage extends VerticalLayout {
@@ -28,19 +30,13 @@ public class MainPage extends VerticalLayout {
     private GrammarPage grammarPage;
     private NameImagePage nameImagePage;
     private VerticalLayout startPage = new VerticalLayout();
+    private static final Random rnd = new Random();
 
     public MainPage() {
 
         this.setSizeFull();
         setAlignItems(Alignment.CENTER);
         score = new ScoreWidget();
-
-        resetScore(11);
-
-        findImagePage = new FindImagePage(score);
-        arithmeticPage = new ArithmeticPage(score);
-        grammarPage = new GrammarPage(score);
-        nameImagePage = new NameImagePage(score);
 
         H1 title = new H1("Brain Recovery");
 
@@ -56,16 +52,23 @@ public class MainPage extends VerticalLayout {
         buttons.add(findImage);
         buttons.add(grammar);
         buttons.add(nameImage);
+        buttons.add(random);
 
         startPage.setJustifyContentMode(JustifyContentMode.CENTER);
         startPage.setAlignItems(Alignment.CENTER);
-        startPage.add(title);
         startPage.setWidth("30em");
+        startPage.add(title);
+        TextField numberField = new TextField("Number of tasks");
+        numberField.setPattern("[0-9]*");
+        numberField.setPreventInvalidInput(true);
+        startPage.add(numberField);
         for (Button button : buttons) {
             button.setWidth("25em");
             button.setHeight("10em");
             button.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
-            button.addClickListener(event->{GenerateGame(10,event.getSource().getText());});
+            button.addClickListener(event-> {
+                if (numberField.getValue() != null && !numberField.getValue().equals(""))
+                {GenerateGame(Integer.parseInt(numberField.getValue()),event.getSource().getText());}});
             startPage.add(button);
         }
         add(startPage);
@@ -77,11 +80,21 @@ public class MainPage extends VerticalLayout {
         resetScore(numberOfGames);
         switch (type)
         {
-            case "Find Image":add(findImagePage); break;
-            case "Arithmetics":add(arithmeticPage);break;
-            case "Grammar":add(grammarPage);break;
-            case "Name Image":add(nameImagePage);break;
-            case "Random":break;
+            case "Find Image":add(new FindImagePage(score)); break;
+            case "Arithmetics":add( new ArithmeticPage(score));break;
+            case "Grammar":add(new GrammarPage(score));break;
+            case "Name Image":add(new NameImagePage(score));break;
+            case "Random":
+                int rand = rnd.nextInt(4);
+                switch (rand)
+                {
+                    case 0:add(new FindImagePage(score)); break;
+                    case 1:add( new ArithmeticPage(score));break;
+                    case 2:add(new GrammarPage(score));break;
+                    case 3:add(new NameImagePage(score));break;
+                    default:break;
+                }
+                break;
             default:break;
         }
     }

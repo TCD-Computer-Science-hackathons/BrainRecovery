@@ -3,6 +3,7 @@ package ie.tcd.pavel.pages;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.Text;
 import com.vaadin.flow.component.button.Button;
+import com.vaadin.flow.component.html.H2;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.progressbar.ProgressBar;
 
@@ -14,13 +15,13 @@ public class ScoreWidget extends VerticalLayout
     public int inCorrect;
     public int goal;
     ProgressBar progressBar;
-    Text info;
+    H2 info;
     Button goBack;
 
     public ScoreWidget()
     {
         progressBar = new ProgressBar();
-        info = new Text("");
+        info = new H2("");
         goBack = new Button("Exit");
         this.goBack.addClickListener(event->{
             exit();
