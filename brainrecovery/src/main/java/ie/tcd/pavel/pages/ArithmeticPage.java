@@ -42,6 +42,7 @@ public class ArithmeticPage extends VerticalLayout {
         answer.setPreventInvalidInput(true);
         answer.setMaxLength(10);
         answer.getStyle().set("width", "10em");
+        answer.focus();
         add(answer);
 
         incorrect = new Label("");

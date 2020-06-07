@@ -27,6 +27,7 @@ public class MainPage extends VerticalLayout {
     private FindImagePage findImagePage;
     private GrammarPage grammarPage;
     private NameImagePage nameImagePage;
+    private CompletePage completePage;
     private VerticalLayout startPage = new VerticalLayout();
 
     public MainPage() {
@@ -69,6 +70,7 @@ public class MainPage extends VerticalLayout {
             startPage.add(button);
         }
         add(startPage);
+
     }
 
     public void GenerateGame(int numberOfGames, String type)
@@ -90,6 +92,15 @@ public class MainPage extends VerticalLayout {
     {
         removeAll();
         add(startPage);
+    }
+
+    public void goToCompleteScreen() {
+        completePage = new CompletePage(score.correct, score.inCorrect);
+        completePage.continueButton.addClickListener(buttonClickEvent -> {
+           goToStarterScreen();
+        });
+        removeAll();
+        add(completePage);
     }
 
     public void resetScore(int goal)
