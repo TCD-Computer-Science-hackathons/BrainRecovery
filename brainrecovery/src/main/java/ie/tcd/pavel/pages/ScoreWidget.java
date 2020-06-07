@@ -49,12 +49,27 @@ public class ScoreWidget extends VerticalLayout
         }
     }
 
+    public void complete()
+    {
+        Optional<Component> mainPageOptional = this.getParent();
+        if(mainPageOptional.isPresent())
+        {
+            VerticalLayout gamePage = (VerticalLayout) mainPageOptional.get();
+            if(gamePage.getParent().isPresent())
+            {
+                MainPage mainPage = (MainPage)gamePage.getParent().get();
+                mainPage.goToCompleteScreen();
+            }
+
+        }
+    }
+
 
     public void generateScore()
     {
         if(correct==goal)
         {
-            exit();
+            complete();
         }
         else {
             removeAll();

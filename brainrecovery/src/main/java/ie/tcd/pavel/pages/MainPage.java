@@ -1,22 +1,13 @@
 package ie.tcd.pavel.pages;
 
-import com.vaadin.flow.component.Key;
-import com.vaadin.flow.component.Text;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
-import com.vaadin.flow.component.charts.model.Title;
-import com.vaadin.flow.component.dependency.CssImport;
 import com.vaadin.flow.component.html.H1;
-import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
-import com.vaadin.flow.component.progressbar.ProgressBar;
-import com.vaadin.flow.component.textfield.NumberField;
+
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.router.Route;
-import com.vaadin.flow.server.PWA;
-import org.springframework.beans.factory.annotation.Autowired;
 
-import javax.swing.*;
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -29,6 +20,7 @@ public class MainPage extends VerticalLayout {
     private FindImagePage findImagePage;
     private GrammarPage grammarPage;
     private NameImagePage nameImagePage;
+    private CompletePage completePage;
     private VerticalLayout startPage = new VerticalLayout();
     private static final Random rnd = new Random();
 
@@ -72,6 +64,7 @@ public class MainPage extends VerticalLayout {
             startPage.add(button);
         }
         add(startPage);
+
     }
 
     public void GenerateGame(int numberOfGames, String type)
@@ -105,14 +98,19 @@ public class MainPage extends VerticalLayout {
         add(startPage);
     }
 
+    public void goToCompleteScreen() {
+        completePage = new CompletePage(score.correct, score.inCorrect);
+        completePage.continueButton.addClickListener(buttonClickEvent -> {
+           goToStarterScreen();
+        });
+        removeAll();
+        add(completePage);
+    }
+
     public void resetScore(int goal)
     {
         score.goal = goal;
         score.correct = score.inCorrect = 0;
         score.generateScore();
     }
-
-
-
-
 }

@@ -41,6 +41,6 @@ Yes they do not,No they not,%No they do not,Yes they not
 Which one is a plural noun?
 bottle,glass,table,%leaves
 I am going _____ in the sea
-swam,to swam,%to swim,swimming
+swam,to swam,%to swim,walking
 Bob _____ in his diary all the time
 writing,is write,%writes,shakes
