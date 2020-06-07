@@ -22,7 +22,6 @@ public class GrammarPage extends VerticalLayout {
     private Random random;
     private H1 title;
     private String correctAnswer;
-    private Label error;
     private int sentenceIndex;
     public ScoreWidget score;
 
@@ -32,7 +31,6 @@ public class GrammarPage extends VerticalLayout {
         options = new ArrayList<>();
         random = new Random();
         title = new H1();
-        error = new Label();
 
         setAlignItems(Alignment.CENTER);
 
@@ -98,10 +96,8 @@ public class GrammarPage extends VerticalLayout {
                 if(button.getText().equals(correctAnswer)) {
                     score.correct++;
                     button.addThemeVariants(ButtonVariant.LUMO_SUCCESS);
-                    error.setText("");
                 } else {
                     score.inCorrect++;
-                    error.setText("Wrong Answer");
                     button.addThemeVariants(ButtonVariant.LUMO_ERROR);
                 }
                 score.generateScore();
@@ -116,7 +112,6 @@ public class GrammarPage extends VerticalLayout {
         for(Button b : buttons) {
             add(b);
         }
-        add(error);
         add(score);
     }
 }
