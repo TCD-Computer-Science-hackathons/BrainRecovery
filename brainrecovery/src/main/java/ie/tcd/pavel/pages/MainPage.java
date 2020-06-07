@@ -16,10 +16,6 @@ public class MainPage extends VerticalLayout {
 
 
     private ScoreWidget score;
-    private ArithmeticPage arithmeticPage;
-    private FindImagePage findImagePage;
-    private GrammarPage grammarPage;
-    private NameImagePage nameImagePage;
     private CompletePage completePage;
     private VerticalLayout startPage = new VerticalLayout();
     private static final Random rnd = new Random();
