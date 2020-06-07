@@ -59,7 +59,8 @@ public class MainPage extends VerticalLayout {
             button.setHeight("10em");
             button.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
             button.addClickListener(event-> {
-                if (numberField.getValue() != null && !numberField.getValue().equals(""))
+                if (numberField.getValue() != null && !numberField.getValue().equals("")&&
+                        Integer.parseInt(numberField.getValue()) != 0)
                 {GenerateGame(Integer.parseInt(numberField.getValue()),event.getSource().getText());}});
             startPage.add(button);
         }
