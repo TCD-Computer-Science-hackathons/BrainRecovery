@@ -10,7 +10,9 @@ import com.vaadin.flow.router.Route;
 import org.atmosphere.interceptor.AtmosphereResourceStateRecovery;
 
 import javax.print.DocFlavor;
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.*;
@@ -57,8 +59,19 @@ public class GrammarPage extends VerticalLayout {
     }
 
     private ArrayList<String> readGrammarQuestions() throws IOException {
-        String path = System.getProperty("user.dir")+"\\src\\main\\java\\ie\\tcd\\pavel\\sentences\\sentences.txt";
-        return (ArrayList<String>) Files.readAllLines(Paths.get(path));
+
+        ArrayList<String> lines = new ArrayList<>();
+        String line = "";
+        try {
+            BufferedReader reader = new BufferedReader(new InputStreamReader(NameImagePage.class.
+                    getResourceAsStream("/sentences/sentences.txt")));
+            while ((line = reader.readLine()) != null) {
+                lines.add(line);
+            }
+        } catch (Exception e) {
+            throw new IllegalArgumentException("Unable to load shader from file path: " , e);
+        }
+        return lines;
     }
 
     private void generatePage() {

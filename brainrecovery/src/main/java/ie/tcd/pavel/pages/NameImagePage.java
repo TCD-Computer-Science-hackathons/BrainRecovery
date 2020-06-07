@@ -9,17 +9,20 @@ import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.server.StreamResource;
+import org.apache.commons.io.IOUtils;
 
 
-import java.io.ByteArrayInputStream;
-import java.io.File;
-import java.io.IOException;
+import java.awt.image.BufferedImage;
+import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.*;
 
 public class NameImagePage extends VerticalLayout
 {
+
+    private String[] fileNames = new String[]{"ball","burger","car","cat","circle","computer","orange","plane",
+            "policeman","square","train","triangle"};
     private final static Random rnd = new Random();
     HashMap<String, ArrayList<String>> captions = new HashMap<String, ArrayList<String>>();
     ArrayList<Image> images = new ArrayList<Image>();
@@ -91,59 +94,51 @@ public class NameImagePage extends VerticalLayout
 
     private void loadCaptions()
     {
-        String path = System.getProperty("user.dir")+"\\src\\main\\java\\ie\\tcd\\pavel\\captions";
-        File folder = new File(path);
-        File[] listOfFiles = folder.listFiles();
-        for(int i = 0; i < listOfFiles.length; i++)
-        {
-            ArrayList<String> tempCaptions = new ArrayList<String>();
-            try
-            {
-                tempCaptions = (ArrayList<String>) Files.readAllLines(Paths.get(path + "\\" + listOfFiles[i].
-                        getName()));
-                captions.put(listOfFiles[i].getName().substring(0,listOfFiles[i].getName().lastIndexOf('.')),
-                        tempCaptions);
-            }
-            catch (IOException e)
-            {
-                e.printStackTrace();
-            }
+        String path = "/captions/";
 
+
+        for(int i = 0; i <fileNames.length;i++) {
+            ArrayList<String> lines = new ArrayList<>();
+            String line ="";
+            try {
+                BufferedReader reader = new BufferedReader(new InputStreamReader(NameImagePage.class.
+                        getResourceAsStream(path+fileNames[i]+".txt")));
+                while ((line = reader.readLine()) != null) {
+                    lines.add(line);
+                }
+            } catch (Exception e) {
+                throw new IllegalArgumentException("Unable to load shader from file path: " + path, e);
+            }
+            captions.put(fileNames[i],lines);
         }
     }
 
     private void loadAllImages()
     {
-        File folder = new File( System.getProperty("user.dir")+"\\src\\main\\java\\ie\\tcd\\pavel\\images");
-        File[] listOfFiles = folder.listFiles();
 
-        for(int i = 0; i < listOfFiles.length; i++)
+        for(int i = 0; i < fileNames.length; i++)
         {
-            images.add(loadImage(listOfFiles[i].getName(),"25em","25em"));
+            images.add(loadImage(fileNames[i],"25em","25em"));
         }
 
     }
 
     private Image loadImage(String name, String width, String height)
     {
-        try
-        {
-            File imgFile = new File(System.getProperty("user.dir")+"\\src\\main\\java\\ie\\tcd\\pavel\\images\\"
-                    +name);
-            byte[] imageBytes = Files.readAllBytes(imgFile.toPath());
-            StreamResource resource = new StreamResource(name, () -> new ByteArrayInputStream(imageBytes));
-
-            Image image = new Image(resource, name);
+        String path = "/images/";
+        try {
+            InputStream inputStream = NameImagePage.class.getResourceAsStream(path + name + ".jpg");
+            byte[] imageBytes = IOUtils.toByteArray(inputStream);
+            StreamResource resource = new StreamResource(name+ ".jpg", () -> new ByteArrayInputStream(imageBytes));
+            Image image = new Image(resource, name+ ".jpg");
             image.setWidth(width);
             image.setHeight(height);
 
-            image.getStyle().set("border","1px solid #000000");
+            image.getStyle().set("border", "1px solid #000000");
 
             return image;
 
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             System.out.println("ERROR LOADING IMAGE: " + e);
         }
         return null;

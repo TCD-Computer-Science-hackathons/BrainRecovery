@@ -7,9 +7,11 @@ import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.server.StreamResource;
+import org.apache.commons.io.IOUtils;
 
 
 import java.io.ByteArrayInputStream;
+import java.io.InputStream;
 import java.nio.file.Files;
 import java.io.File;
 import java.util.*;
@@ -18,6 +20,8 @@ import java.util.*;
 public class FindImagePage extends VerticalLayout
 {
 
+    private String[] fileNames = new String[]{"ball","burger","car","cat","circle","computer","orange","plane",
+            "policeman","square","train","triangle"};
     private ArrayList<Image> images = new ArrayList<Image>();
     private ArrayList<Integer> occupiedIndices = new ArrayList<Integer>();
     private final static Random rnd = new Random();
@@ -67,6 +71,7 @@ public class FindImagePage extends VerticalLayout
 
         int index = images.get(correctOption).getSrc().lastIndexOf('/');
         correctOptionName =  images.get(correctOption).getSrc().substring(index+1);
+        correctOptionName = correctOptionName.substring(0,correctOptionName.lastIndexOf('.'));
 
         topRow.add(images.get(occupiedIndices.get(0)),images.get(occupiedIndices.get(1)));
         bottomRow.add(images.get(occupiedIndices.get(2)),images.get(occupiedIndices.get(3)));
@@ -104,28 +109,26 @@ public class FindImagePage extends VerticalLayout
 
     private void loadAllImages()
     {
-        File folder = new File( System.getProperty("user.dir")+"\\src\\main\\java\\ie\\tcd\\pavel\\images");
-        File[] listOfFiles = folder.listFiles();
 
-        for(int i = 0; i < listOfFiles.length; i++)
+        for(int i = 0; i < fileNames.length; i++)
         {
-            images.add(loadImage(listOfFiles[i].getName(),"13em","13em"));
+            images.add(loadImage(fileNames[i],"13em","13em"));
         }
 
     }
 
     private Image loadImage(String name, String width, String height)
     {
-        try
-        {
-            File imgFile = new File(System.getProperty("user.dir")+"\\src\\main\\java\\ie\\tcd\\pavel\\images\\"
-                    +name);
-            byte[] imageBytes = Files.readAllBytes(imgFile.toPath());
-            StreamResource resource = new StreamResource(name, () -> new ByteArrayInputStream(imageBytes));
-
-            Image image = new Image(resource, name);
+        String path = "/images/";
+        try {
+            InputStream inputStream = NameImagePage.class.getResourceAsStream(path + name + ".jpg");
+            byte[] imageBytes = IOUtils.toByteArray(inputStream);
+            StreamResource resource = new StreamResource(name+ ".jpg", () -> new ByteArrayInputStream(imageBytes));
+            Image image = new Image(resource, name+ ".jpg");
             image.setWidth(width);
             image.setHeight(height);
+
+            image.getStyle().set("border", "1px solid #000000");
 
             image.addClickListener(event->{isCorrect = event.getSource().equals(images.get(correctOption));
 
@@ -141,16 +144,11 @@ public class FindImagePage extends VerticalLayout
                 buildLayout();
             });
 
-            image.getStyle().set("border","1px solid #000000");
-
             return image;
 
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             System.out.println("ERROR LOADING IMAGE: " + e);
         }
         return null;
     }
-
 }
